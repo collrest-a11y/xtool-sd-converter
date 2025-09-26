@@ -31,3 +31,6 @@ export type AppAction =
   | { type: 'SET_PROCESSING'; payload: boolean }
   | { type: 'SET_ERROR'; payload: string | null }
   | { type: 'RESET_STATE' };
+
+// Export extension management types
+export * from '../lib/extensions/types';
