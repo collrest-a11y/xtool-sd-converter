@@ -10,7 +10,15 @@
       "Bash(git push:*)",
       "Bash(cd:*)",
       "WebSearch",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "Bash(npm run dev:*)",
+      "Bash(npm test)",
+      "Bash(curl:*)",
+      "Bash(npm run simulation:*)",
+      "Bash(npx tsx:*)",
+      "Bash(git commit:*)",
+      "Bash(git checkout:*)",
+      "Bash(git merge:*)"
     ],
     "deny": [],
     "ask": []
