@@ -5,7 +5,10 @@
       "Bash(git add:*)",
       "Bash(gh auth:*)",
       "Bash(gh repo create:*)",
-      "SlashCommand(/pm:epic-start start-project)"
+      "SlashCommand(/pm:epic-start start-project)",
+      "Read(//c/Users/Brendan/source/repos/epic-start-project/**)",
+      "Bash(git push:*)",
+      "Bash(cd:*)"
     ],
     "deny": [],
     "ask": []
