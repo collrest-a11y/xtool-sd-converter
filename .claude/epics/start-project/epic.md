@@ -4,7 +4,8 @@ status: backlog
 created: 2025-09-26T02:45:57Z
 progress: 0%
 prd: .claude/prds/start-project.md
-github: [Will be updated when synced to GitHub]
+github: https://github.com/collrest-a11y/xtool-sd-converter/issues/1
+updated: 2025-09-26T03:38:36Z
 ---
 
 # Epic: xTool Stable Diffusion Art Converter
@@ -22,10 +23,11 @@ Build a streamlined web application that integrates with the existing Stable Dif
 - **Extension Reuse**: Leverage existing WebUI extensions rather than reimplementing functionality
 
 ### Technology Stack
-- **Frontend**: React 18 with TypeScript (single-page app)
-- **Backend**: FastAPI Python server (thin layer)
-- **SD Integration**: WebUI API calls via HTTP
-- **File Processing**: Browser-based Canvas API for preprocessing
+- **Full-Stack Framework**: Next.js 14+ with TypeScript
+- **Frontend**: React 18 components with App Router
+- **Backend**: Next.js API routes (/app/api/*)
+- **SD Integration**: WebUI API calls via fetch
+- **File Processing**: Browser Canvas API + Sharp (server-side)
 - **Storage**: Local filesystem only (no database initially)
 
 ### Simplification Strategy
@@ -36,32 +38,49 @@ Build a streamlined web application that integrates with the existing Stable Dif
 
 ## Technical Approach
 
-### Frontend Components
-- **MainConverter.tsx**: Single page with upload area and style selector
-- **PromptBuilder.tsx**: Advanced prompt engineering interface
-- **PreviewPanel.tsx**: Before/after comparison view
-- **ExportOptions.tsx**: Format selection and xTool presets
-
-### Backend Services
-- **api/convert**: Proxy requests to WebUI with xTool optimization
-- **api/styles**: Serve style templates and prompts
-- **api/materials**: xTool material settings database
-- **api/export**: Post-process images for laser cutting formats
+### Next.js App Structure
+```
+app/
+├── api/                    # Backend API routes
+│   ├── convert/route.ts    # Image conversion endpoint
+│   ├── styles/route.ts     # Style templates endpoint
+│   ├── materials/route.ts  # xTool materials database
+│   └── export/route.ts     # Export formats endpoint
+├── components/             # React components
+│   ├── ImageUpload.tsx     # Drag-drop upload area
+│   ├── StyleSelector.tsx   # Style gallery with previews
+│   ├── PromptBuilder.tsx   # Advanced prompt interface
+│   ├── PreviewPanel.tsx    # Before/after comparison
+│   └── ExportOptions.tsx   # Format selection
+├── page.tsx               # Main converter page
+└── layout.tsx             # Root layout with providers
+```
 
 ### WebUI Integration
-```python
-class WebUIConnector:
-    def __init__(self):
-        self.base_url = "http://127.0.0.1:7860"
-        self.api = f"{self.base_url}/sdapi/v1"
+```typescript
+// lib/sd-client.ts
+export class SDWebUIClient {
+  private baseUrl = 'http://127.0.0.1:7860'
+  private api = `${this.baseUrl}/sdapi/v1`
 
-    def txt2img(self, prompt, negative, settings):
-        # Direct API call to existing WebUI
-        return requests.post(f"{self.api}/txt2img", json={...})
+  async txt2img(prompt: string, negative: string, settings: Settings) {
+    const response = await fetch(`${this.api}/txt2img`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt, negative_prompt: negative, ...settings })
+    })
+    return response.json()
+  }
 
-    def img2img(self, image, prompt, settings):
-        # Use WebUI's img2img endpoint
-        return requests.post(f"{self.api}/img2img", json={...})
+  async img2img(image: string, prompt: string, settings: Settings) {
+    const response = await fetch(`${this.api}/img2img`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ init_images: [image], prompt, ...settings })
+    })
+    return response.json()
+  }
+}
 ```
 
 ## Implementation Strategy
@@ -167,16 +186,16 @@ Simplified to 8 essential tasks:
 - Focus on most-used styles first
 
 ## Tasks Created
-- [ ] 001.md - WebUI Integration (parallel: true)
-- [ ] 002.md - Core UI Shell (parallel: true)
-- [ ] 003.md - Style Engine (parallel: false, depends on: 001)
-- [ ] 004.md - xTool Optimizer (parallel: false, depends on: 003)
-- [ ] 005.md - Export Pipeline (parallel: false, depends on: 003, 004)
-- [ ] 006.md - Prompt System (parallel: true, depends on: 002)
-- [ ] 007.md - Extension Checker (parallel: true)
-- [ ] 008.md - Polish & Testing (parallel: false, depends on: all)
+- [ ] #2 - WebUI Integration (parallel: true)
+- [ ] #3 - Core UI Shell (parallel: true)
+- [ ] #4 - Style Engine (parallel: false, depends on: #2)
+- [ ] #5 - xTool Optimizer (parallel: false, depends on: #4)
+- [ ] #6 - Export Pipeline (parallel: false, depends on: #4, #5)
+- [ ] #7 - Prompt System (parallel: true, depends on: #3)
+- [ ] #8 - Extension Checker (parallel: true)
+- [ ] #9 - Polish & Testing (parallel: false, depends on: all)
 
 Total tasks: 8
-Parallel tasks: 4 (001, 002, 006, 007)
-Sequential tasks: 4 (003, 004, 005, 008)
+Parallel tasks: 4 (#2, #3, #7, #8)
+Sequential tasks: 4 (#4, #5, #6, #9)
 Estimated total effort: 116 hours
