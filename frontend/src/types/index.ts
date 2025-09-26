@@ -14,8 +14,9 @@ export interface ConversionStyle {
   name: string;
   description: string;
   thumbnail: string;
-  prompt: string;
-  settings: Record<string, any>;
+  prompt?: string; // Deprecated, kept for compatibility
+  settings?: Record<string, any>; // Deprecated, kept for compatibility
+  category?: 'vector' | 'raster' | 'hybrid';
 }
 
 export interface AppState {
