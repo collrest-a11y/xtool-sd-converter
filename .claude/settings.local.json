@@ -8,7 +8,9 @@
       "SlashCommand(/pm:epic-start start-project)",
       "Read(//c/Users/Brendan/source/repos/epic-start-project/**)",
       "Bash(git push:*)",
-      "Bash(cd:*)"
+      "Bash(cd:*)",
+      "WebSearch",
+      "WebFetch(domain:github.com)"
     ],
     "deny": [],
     "ask": []
